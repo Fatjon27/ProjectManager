@@ -1,5 +1,7 @@
 package com.betaplan.fatjon.projectmanager.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -30,6 +32,9 @@ public class Project {
                joinColumns = @JoinColumn(name = "project_id"),
                inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
+    @OneToMany(mappedBy = "project",fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Task> tasks;
     public Project(){}
 
     public Long getId() {
@@ -94,5 +99,13 @@ public class Project {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }

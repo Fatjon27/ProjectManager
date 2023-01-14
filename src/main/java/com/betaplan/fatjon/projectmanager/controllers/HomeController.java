@@ -2,8 +2,10 @@ package com.betaplan.fatjon.projectmanager.controllers;
 
 import com.betaplan.fatjon.projectmanager.models.LoginUser;
 import com.betaplan.fatjon.projectmanager.models.Project;
+import com.betaplan.fatjon.projectmanager.models.Task;
 import com.betaplan.fatjon.projectmanager.models.User;
 import com.betaplan.fatjon.projectmanager.services.ProjectService;
+import com.betaplan.fatjon.projectmanager.services.TaskService;
 import com.betaplan.fatjon.projectmanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,8 @@ public class HomeController {
     private UserService userService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private TaskService taskService;
 
     @GetMapping("/")
     public String index(Model model, @ModelAttribute("newUser") User user, @ModelAttribute("newLogin") LoginUser newLogin) {
@@ -171,5 +175,33 @@ public class HomeController {
             return "redirect:/dashboard";
         }
     }
-
+    @GetMapping("/projects/{id}/tasks")
+    public String tasks(@PathVariable("id") Long id, Model model, HttpSession session, @ModelAttribute("task")Task task){
+        Project project = projectService.findById(id);
+        User user = userService.findById((Long) session.getAttribute("loggedInUserId"));
+        model.addAttribute("project",project);
+        model.addAttribute("user",user);
+        return "task";
+    }
+    @PostMapping("/projects/{id}/tasks")
+    public String createTask(@PathVariable("id") Long id, Model model, HttpSession session,@Valid @ModelAttribute("task")Task task,BindingResult result){
+        Project project = projectService.findById(id);
+        User user = userService.findById((Long) session.getAttribute("loggedInUserId"));
+        model.addAttribute("project",project);
+        model.addAttribute("user",user);
+        if(session.getAttribute("loggedInUserId")==null){
+            return "redirect:/logout";
+        }
+        else {
+            if(result.hasErrors()){
+                return "task" ;
+            }
+            else {
+                task.setUser(user);
+                task.setProject(project);
+                taskService.createTask(task);
+                return "redirect:/projects/"+id+"/tasks";
+            }
+        }
+    }
 }
