@@ -33,10 +33,5 @@
     <form:form action="/delete/${project.id}" method="delete">
         <input type="submit" value="Delete Project">
     </form:form>
-
-
-<%--    <c:forEach items="${list}" var="one">--%>
-<%--        <p>Added by <c:out value="${one.task}"/> </p>--%>
-<%--    </c:forEach>--%>
 </body>
 </html>

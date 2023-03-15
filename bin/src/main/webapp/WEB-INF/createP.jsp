@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Project Details</title>
+    <title>New Project</title>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css"> <!-- change to match your file/naming structure -->
     <script src="/webjars/jquery/jquery.min.js"></script>
@@ -19,24 +19,26 @@
     <script type="text/javascript" src="/js/app.js"></script><!-- change to match your file/naming structure -->
 </head>
 <body>
-    <div>
-        <h1>Project Details</h1>
-        <a href="/dashboard">Back to Dashboard</a>
-    </div>
-    <hr>
-    <p>Project: <c:out value="${project.title}"/></p>
-    <p>Description: <c:out value="${project.description}"/></p>
-    <p>Due Date: <c:out value="${project.dueDate}"/></p>
-    <hr>
-    <a href="/projects/${project.id}/tasks">See Tasks!</a>
-    <hr>
-    <form:form action="/delete/${project.id}" method="delete">
-        <input type="submit" value="Delete Project">
+    <h1>Create a Project</h1>
+    <%--@elvariable id="project" type=""--%>
+    <form:form method="post" action="/projects/new" modelAttribute="project">
+        <div>
+            <form:label path="title">Project Title: </form:label>
+            <form:errors path="title"/>
+            <form:input path="title"/>
+        </div>
+        <div>
+            <form:label path="description">Project Description: </form:label>
+            <form:errors path="description"/>
+            <form:textarea path="description"/>
+        </div>
+        <div>
+            <form:label path="dueDate">Due Date: </form:label>
+            <form:errors path="dueDate"/>
+            <form:input type="date" path="dueDate"/>
+        </div>
+        <input type="hidden" value="${user.id}">
+        <input type="submit" value="Submit">
     </form:form>
-
-
-<%--    <c:forEach items="${list}" var="one">--%>
-<%--        <p>Added by <c:out value="${one.task}"/> </p>--%>
-<%--    </c:forEach>--%>
 </body>
 </html>

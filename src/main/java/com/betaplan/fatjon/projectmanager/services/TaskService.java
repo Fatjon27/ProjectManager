@@ -34,4 +34,7 @@ public class TaskService {
     public void deleteById(Long id){
         taskRepository.findById(id);
     }
+    public List<Task> listById(Project project) {
+        return taskRepository.findAllByProjectOrderById(project);
+    }
 }

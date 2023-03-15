@@ -7,10 +7,10 @@ import javax.validation.constraints.Size;
 public class LoginUser {
     @NotBlank
     @Email
-    @Size(min=5)
+    @Size(min=5,message = "Email must be longer")
     private String email;
     @NotBlank
-    @Size(min=8)
+    @Size(min=8,message = "Password must be longer")
     private String password;
     public LoginUser(){}
 

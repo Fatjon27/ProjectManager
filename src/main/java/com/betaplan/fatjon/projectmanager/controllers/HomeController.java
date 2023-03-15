@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -137,6 +138,8 @@ public class HomeController {
             User user = userService.findById(loggedInUserId);
             project.setTeamLeader(user);
             projectService.updateProject(project);
+            user.getParticipatingProjects().add(project);
+            userService.updateUser(user);
             return "redirect:/dashboard";
         }
     }
@@ -161,6 +164,9 @@ public class HomeController {
     public String projectDetails(@PathVariable("id") Long id,Model model){
         Project project = projectService.findById(id);
         model.addAttribute("project",project);
+//
+//        List<Task> task1= taskService.listById(project);
+//        model.addAttribute("list",task1);
         return "projectDetails";
     }
     @DeleteMapping("/delete/{id}")
